@@ -1,0 +1,57 @@
+.checkout-container {
+  padding: 30px;
+ 
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+ 
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: auto;
+ 
+    .customer-details,
+    .order-summary {
+      padding: 25px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+ 
+    .customer-details {
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+ 
+        input,
+        textarea {
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+ 
+        textarea {
+          min-height: 100px;
+        }
+ 
+        button {
+          padding: 12px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      }
+    }
+ 
+    .order-summary {
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+    }
+  }
+}

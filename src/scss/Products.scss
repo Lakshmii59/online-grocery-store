@@ -1,0 +1,13 @@
+.products-container{
+    padding: 30px;
+
+    h1{
+        margin-bottom: 25px;
+    }
+
+    .products-grid{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px; 
+    }
+}
