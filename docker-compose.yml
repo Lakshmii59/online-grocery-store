@@ -1,0 +1,78 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: grocery-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  eureka-server:
+    image: "lakshmii59/eureka-server:a3"
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - postgres
+
+  config-server:
+    image: "lakshmii59/config-server:a3"
+    container_name: config-server
+    ports:
+      - "8071:8071"
+
+  product-catalog-service:
+    image: "lakshmii59/product-catalog-service:a3"
+    container_name: product-catalog-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - config-server
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/product_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8071
+
+  inventory-service:
+    image: "lakshmii59/inventory-service:a3"
+    container_name: inventory-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - config-server
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventory_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8071
+
+  order-service:
+    image: "lakshmii59/order-service:a3"
+    container_name: order-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+      - config-server
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/order_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8071
+
+volumes:
+  postgres_data:
