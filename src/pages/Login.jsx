@@ -32,10 +32,15 @@ function Login() {
       const data = await response.json()
  
       localStorage.setItem("customer", JSON.stringify(data))
+      window.dispatchEvent(new Event("customerChanged"))
  
       console.log("Login successful:", data)
- 
-      navigate(location.state?.from || "/")
+
+      if(data.role === "ADMIN"){
+        navigate("/admin")
+      }else{
+        navigate(location.state?.from || "/")
+      }
     } catch (error) {
       console.error("Login failed:", error)
     }

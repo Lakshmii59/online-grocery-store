@@ -27,10 +27,11 @@ function Navbar() {
  
   const handleLogout = () => {
     localStorage.removeItem("customer")
+    window.dispatchEvent(new Event("customerChanged"))
     setCustomer(null)
     setShowProfile(false)
     navigate("/login")
-  };
+  }
  
   return (
     <nav className="navbar">
@@ -49,48 +50,76 @@ function Navbar() {
       </div>
  
       <div className="nav-links">
+        {customer?.role !== "ADMIN" && (
         <div className="category-dropdown">
-          <button className="category-button" 
-          onClick={() => setShowCategories(!showCategories)}>Category ▾</button>
-          {showCategories && (
-            <div className="category-menu">
-              {categories.map((category) => (
-                <div key={category.categoryId}
-                className="category-item" onClick={() => {
-                  navigate(`/products?category=${category.categoryId}`)
-                  setShowCategories(false)
-                }}>
-                  {category.categoryName}
-                  </div>
-              ))}
-              </div>
-          )}
-          </div>
-
-        <Link to="/products">Products</Link>
-        <Link to="/cart">Cart</Link>
+        <button className="category-button"
+            onClick={() => setShowCategories(!showCategories)}>
+            Category ▼
+        </button>
  
+        {showCategories && (
+            <div className="category-menu">
+                {categories.map((category) => (
+                    <div key={category.categoryId} className="category-item"
+                        onClick={() => {
+                            navigate(`/products?category=${category.categoryId}`)
+                            setShowCategories(false)
+                        }}
+                    >
+                        {category.categoryName}
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+)}
+
+        {customer?.role === "ADMIN" ? (
+          <>
+          <Link to="/admin/products">Products</Link>
+          <Link to="/admin/categories">Categories</Link>
+          <Link to="/admin/inventory">Inventory</Link>
+          </>
+        ) : (
+          <>
+           <Link to="/products">Products</Link>
+           <Link to="/cart">Cart</Link>
+          </>
+        )}
+       
         {customer ? (
-          <div className="profile-container">
-            <button className="profile-button" onClick={() => setShowProfile(!showProfile)}>👤Profile</button>
+    customer.role === "ADMIN" ? (
+        <div className="profile-container">
+            <button className="profile-button" onClick={() => navigate("/admin")}>👤 Admin</button>
+        </div>
+    ) : (
+        <div className="profile-container">
+            <button className="profile-button" onClick={() => setShowProfile(!showProfile)}>👤 Profile</button>
  
             {showProfile && (
-              <div className="profile-menu">
-                <h3>My Account</h3>
-                <p>{customer.customerName}</p>
-                <p>{customer.email}</p>
-                <hr />
-                <div onClick={() => navigate("/profile")}>My Account</div>
-                <div onClick={() => navigate("/cart")}>My Basket</div>
-                <div>My Orders</div>
-                <div>Contact Us</div>
-                <div onClick={handleLogout}>Logout</div>
-              </div>
+                <div className="profile-menu">
+                    <h3>My Account</h3>
+                    <p>{customer.customerName}</p>
+                    <p>{customer.email}</p>
+ 
+                    <hr />
+ 
+                    <div onClick={() => navigate("/profile")}>My Account</div>
+ 
+                    <div onClick={() => navigate("/cart")}>My Basket</div>
+ 
+                    <div>My Orders</div>
+ 
+                    <div>Contact Us</div>
+ 
+                    <div onClick={handleLogout}>Logout</div>
+                </div>
             )}
-          </div>
-        ) : (
-          <Link to="/login">Login/Sign up</Link>
-        )}
+        </div>
+    )
+) : (
+    <Link to="/login">Login/Sign up</Link>
+)}
       </div>
     </nav>
   )

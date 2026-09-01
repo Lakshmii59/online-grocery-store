@@ -1,84 +1,127 @@
-import { createContext, useContext, useMemo, useState } from "react"
+import { createContext, useContext, useMemo, useState, useEffect } from "react"
  
 const CartContext = createContext()
  
 export function CartProvider({ children }) {
  
-const [cart, setCart] = useState(() => {
-   const savedCart = localStorage.getItem("cart")
-   return savedCart ? JSON.parse(savedCart) : []
-})
+    const getCustomerId = () => {
+        const customer = JSON.parse(localStorage.getItem("customer"))
+        return customer?.customerId
+    }
  
-const addToCart = (product) => {
-   setCart((currentCart) => {
+    const getCartKey = () => {
+        const customerId = getCustomerId()
+        return customerId ? `cart_${customerId}` : null
+    }
  
-     const updatedCart = currentCart.some(
-       (item) => item.productId === product.productId)?
-        currentCart.map((item) =>
-           item.productId === product.productId ?
-         { ...item, quantity: item.quantity + 1 }: item)
-       : [...currentCart, { ...product, quantity: 1 }]
-     localStorage.setItem("cart", JSON.stringify(updatedCart))
+    const [cart, setCart] = useState(() => {
+        const cartKey = getCartKey()
+        if (!cartKey) {return []}
  
-     return updatedCart
-   })
-}
+        const savedCart = localStorage.getItem(cartKey)
+        return savedCart ? JSON.parse(savedCart) : []
+    })
  
-const increaseQuantity = (productId) => {
-   setCart((currentCart) => {
+    useEffect(() => {
  
-     const updatedCart = currentCart.map((item) =>
-       item.productId === productId?
-      { ...item, quantity: item.quantity + 1 }: item
-     )
-     localStorage.setItem("cart", JSON.stringify(updatedCart))
-     return updatedCart
-   })
-}
+        const loadCustomerCart = () => {
+            const cartKey = getCartKey() 
+            if (!cartKey) {
+                setCart([])
+                return
+            }
+            const savedCart = localStorage.getItem(cartKey)
+            setCart(savedCart ? JSON.parse(savedCart) : [])
+        }
  
-const decreaseQuantity = (productId) => {
-   setCart((currentCart) => {
+        window.addEventListener("customerChanged", loadCustomerCart)
+        return () => {
+            window.removeEventListener("customerChanged", loadCustomerCart)
+        }},[])
  
-     const updatedCart = currentCart
-       .map((item) =>
-         item.productId === productId ?
-        { ...item, quantity: item.quantity - 1 }: item
-       )
-       .filter((item) => item.quantity > 0)
-     localStorage.setItem("cart", JSON.stringify(updatedCart))
+    const addToCart = (product) => {
+        setCart((currentCart) => {
+            const updatedCart = currentCart.some(
+                (item) => item.productId === product.productId
+            )
+                ? currentCart.map((item) =>
+                    item.productId === product.productId ?
+                 { ...item, quantity: item.quantity + 1 } : item
+                ) : [...currentCart, { ...product, quantity: 1 }]
  
-     return updatedCart
-   })
-}
+            const cartKey = getCartKey()
  
-const removeFromCart = (productId) => {
-   setCart((currentCart) => {
+            if (cartKey) {
+                localStorage.setItem(cartKey,JSON.stringify(updatedCart))
+            }
+            return updatedCart
+        })
+    }
  
-     const updatedCart = currentCart.filter(
-       (item) => item.productId !== productId
-     )
-     localStorage.setItem("cart", JSON.stringify(updatedCart))
+    const increaseQuantity = (productId) => {
+        setCart((currentCart) => {
+            const updatedCart = currentCart.map((item) =>
+                item.productId === productId ?
+             { ...item, quantity: item.quantity + 1 } : item)
  
-     return updatedCart
-   })
-}
+            const cartKey = getCartKey()
  
-const value = useMemo(
-   () => ({
-     cart,
-     addToCart,
-     increaseQuantity,
-     decreaseQuantity,
-     removeFromCart,
-   }),[cart])
+            if (cartKey) {
+                localStorage.setItem(cartKey,  JSON.stringify(updatedCart))
+            }
  
-return (
-   <CartContext.Provider value={value}>
-     {children}
-   </CartContext.Provider>
-)
+            return updatedCart
+        })
+    }
+ 
+    const decreaseQuantity = (productId) => {
+        setCart((currentCart) => {
+            const updatedCart = currentCart
+                .map((item) =>
+                    item.productId === productId ?
+                 { ...item, quantity: item.quantity - 1 }: item
+                ).filter((item) => item.quantity > 0)
+ 
+            const cartKey = getCartKey()
+ 
+            if (cartKey) {
+                localStorage.setItem(cartKey,JSON.stringify(updatedCart))
+            }
+            return updatedCart
+        })
+    }
+ 
+    const removeFromCart = (productId) => {
+        setCart((currentCart) => {
+            const updatedCart = currentCart.filter(
+                (item) => item.productId !== productId
+            )
+ 
+            const cartKey = getCartKey()
+ 
+            if (cartKey) {
+                localStorage.setItem(cartKey,JSON.stringify(updatedCart))
+            }
+            return updatedCart
+        })
+    }
+ 
+    const value = useMemo(
+        () => ({
+            cart,
+            addToCart,
+            increaseQuantity,
+            decreaseQuantity,
+            removeFromCart
+        }),[cart])
+ 
+    return (
+        <CartContext.Provider value={value}>
+            {children}
+        </CartContext.Provider>
+    )
 }
  
 export function useCart() {
-return useContext(CartContext)
+    return useContext(CartContext)
 }

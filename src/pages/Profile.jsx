@@ -6,6 +6,7 @@ function Profile(){
 
     const handleLogout = () => {
         localStorage.removeItem("customer")
+        window.dispatchEvent(new Event("customerChanged"))
         navigate("/login")
     }
 

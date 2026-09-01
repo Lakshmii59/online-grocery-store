@@ -9,6 +9,11 @@ import Cart from "./pages/Cart"
 import Login from "./pages/Login"
 import Checkout from "./pages/Checkout"
 import Register from "./pages/Register"
+import ProtectedRoute from "./components/ProtectedRoute"
+import Admin  from "./pages/Admin"
+import AdminProducts from "./pages/AdminProducts"
+import AdminCategories from "./pages/AdminCategories"
+import AdminInventory from "./pages/AdminInventory"
 
 
 function App() {
@@ -21,11 +26,43 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/products" element={<Products />} />
         <Route path="/categories" element={<Categories/>} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={
+          <ProtectedRoute role="CUSTOMER">
+            <Cart />
+          </ProtectedRoute>
+        } />
         <Route path="/login" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
-        <Route path="/profile" element={<Profile />}/>
-        <Route path="/checkout" element={<Checkout />}/>
+        <Route path="/profile" element={
+          <ProtectedRoute role="CUSTOMER">
+            <Profile />
+          </ProtectedRoute>
+        }/>
+        <Route path="/checkout" element={
+          <ProtectedRoute role="CUSTOMER">
+            <Checkout />
+          </ProtectedRoute>
+        }/>
+        <Route path="/admin" element={
+          <ProtectedRoute role="ADMIN">
+            <Admin />
+          </ProtectedRoute>
+        }/>
+        <Route path="/admin/products" element={
+          <ProtectedRoute role="ADMIN">
+            <AdminProducts />
+          </ProtectedRoute>
+        }/>
+        <Route path="/admin/categories" element={
+          <ProtectedRoute role="ADMIN">
+            <AdminCategories />
+          </ProtectedRoute>
+        }/>
+        <Route path="/admin/inventory" element={
+          <ProtectedRoute role="ADMIN">
+            <AdminInventory />
+          </ProtectedRoute>
+        }/>
       </Routes>    
     </BrowserRouter>
     </CartProvider>
