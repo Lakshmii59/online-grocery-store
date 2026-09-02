@@ -10,13 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>common-library</module>
-        <module>product-catalog-service</module>
-        <module>inventory-service</module>
-        <module>order-service</module>
-        <module>eureka-server</module>
-        <module>config-server</module>
-        <module>user-service</module>
+        <module>backend/common-library</module>
+        <module>backend/product-catalog-service</module>
+        <module>backend/inventory-service</module>
+        <module>backend/order-service</module>
+        <module>backend/eureka-server</module>
+        <module>backend/config-server</module>
     </modules>
 
     <properties>

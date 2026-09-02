@@ -14,6 +14,7 @@ public class ProductMapper {
                 .price(dto.price())
                 .availableQuantity(dto.availableQuantity())
                 .active(dto.active())
+                .imageUrl(dto.imageUrl())
                 .category(category)
                 .build();
     }
@@ -26,6 +27,7 @@ public class ProductMapper {
                 entity.getPrice(),
                 entity.getAvailableQuantity(),
                 entity.getActive(),
+                entity.getImageUrl(),
                 entity.getCategory().getCategoryId()
         );
     }

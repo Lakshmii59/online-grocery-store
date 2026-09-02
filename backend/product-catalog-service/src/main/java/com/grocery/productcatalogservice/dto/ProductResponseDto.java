@@ -28,6 +28,9 @@ public record ProductResponseDto(
         @Schema(description = "Product Status", example = "true")
         Boolean active,
 
+        @Schema(description = "Product Image URL", example = "/images/apple.jpg")
+        String imageUrl,
+
         @Schema(description = "Category ID", example = "1")
         Long categoryId
 

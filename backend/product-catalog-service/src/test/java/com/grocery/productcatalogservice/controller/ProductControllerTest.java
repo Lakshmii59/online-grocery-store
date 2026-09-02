@@ -43,6 +43,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -53,6 +54,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -77,6 +79,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -99,6 +102,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -119,6 +123,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -129,6 +134,7 @@ public class ProductControllerTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 

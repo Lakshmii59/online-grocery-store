@@ -36,6 +36,10 @@ public record ProductRequestDto(
         @Schema(description = "Product Status", example = "true")
         Boolean active,
 
+        @NotBlank(message = "Image URL is required")
+        @Schema(description = "Product Image URL", example = "/images/apple.jpg")
+        String imageUrl,
+
         @NotNull
         @Schema(description = "Category ID", example = "1")
         Long categoryId
