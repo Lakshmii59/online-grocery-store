@@ -14,6 +14,7 @@ import Admin  from "./pages/Admin"
 import AdminProducts from "./pages/AdminProducts"
 import AdminCategories from "./pages/AdminCategories"
 import AdminInventory from "./pages/AdminInventory"
+import Footer from "./components/Footer"
 
 
 function App() {
@@ -63,7 +64,8 @@ function App() {
             <AdminInventory />
           </ProtectedRoute>
         }/>
-      </Routes>    
+      </Routes>   
+      <Footer /> 
     </BrowserRouter>
     </CartProvider>
   )

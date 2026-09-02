@@ -2,9 +2,6 @@ import { useEffect, useState } from "react"
 import { getAllProducts } from "../services/productService"
 import { useSearchParams } from "react-router-dom"
 import ProductCard from "../components/ProductCard"
-import appleImage from "../assets/apple.jpg"
-import carrotImage from "../assets/carrot.jpg"
-import spoonsImage from "../assets/spoons.jpg"
 import "../scss/Products.scss"
                                                             
 function Products(){
@@ -12,11 +9,7 @@ function Products(){
     const [searchParams] = useSearchParams()
     const categoryId = searchParams.get("category")
     const searchTerm = searchParams.get("search") || ""
-    const productImages = {
-        Apple : appleImage,
-        Carrot : carrotImage,
-        Spoon : spoonsImage,
-    }
+
 
     useEffect(() => {
         getAllProducts().then((response) => {
@@ -48,7 +41,7 @@ function Products(){
             <h1>Products</h1>
             <div className="products-grid">
                 {products.map((product) => (
-                <ProductCard key={product.productId} product={product} image={productImages[product.productName]}/>
+                <ProductCard key={product.productId} product={product}/>
             ))}
             </div>
         </div>
