@@ -2,10 +2,6 @@ package com.grocery.productcatalogservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(
-        name = "Category Response",
-        description = "Category response details"
-)
 public record CategoryResponseDto(
 
         @Schema(description = "Category ID", example = "1")

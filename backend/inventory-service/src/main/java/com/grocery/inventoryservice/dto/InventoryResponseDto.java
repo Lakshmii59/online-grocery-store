@@ -2,10 +2,6 @@ package com.grocery.inventoryservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(
-        name = "Inventory Response",
-        description = "Inventory response details"
-)
 public record InventoryResponseDto(
 
         @Schema(description = "Inventory Id", example = "1")

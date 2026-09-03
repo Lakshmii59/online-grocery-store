@@ -1,6 +1,8 @@
 package com.grocery.orderservice.service.impl;
 
+import com.grocery.commonlibrary.exception.CustomerAlreadyExistsException;
 import com.grocery.commonlibrary.exception.CustomerNotFoundException;
+import com.grocery.commonlibrary.exception.InvalidCredentialsException;
 import com.grocery.orderservice.constants.OrderConstants;
 import com.grocery.orderservice.dto.CustomerDto;
 import com.grocery.orderservice.dto.CustomerRegisterRequestDto;
@@ -25,6 +27,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerDto createCustomer(CustomerRegisterRequestDto request) {
 
+        if(customerRepo.findByEmail(request.email()).isPresent()){
+            throw new CustomerAlreadyExistsException("Email already exists");
+        }
+        if(customerRepo.findByPhone(request.phone()).isPresent()){
+            throw new CustomerAlreadyExistsException("Phone number already exists");
+        }
+
         Customer customer = CustomerMapper.toEntity(request);
         Customer savedCustomer = customerRepo.save(customer);
 
@@ -38,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
         if (!request.password().equals(customer.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         return CustomerMapper.toDto(customer);

@@ -1,13 +1,8 @@
 package com.grocery.inventoryservice.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-@Schema(
-        name = "Inventory",
-        description = "Inventory details"
-)
 public record InventoryDto (
 
      Long inventoryId,

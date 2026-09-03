@@ -45,22 +45,6 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponseDto> createProduct(
             @Parameter(description = "Product ID", example = "1")
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = ProductRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                        {
-//                          "name": "Apple",
-//                          "description": "Fresh Red Apple",
-//                          "price": 120.50,
-//                          "category": "Fruits"
-//                        }
-//                        """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody ProductRequestDto request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -108,22 +92,6 @@ public class ProductController {
 
             @Parameter(description = "Product Id", example = "1")
             @PathVariable("productId") Long productId,
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = ProductRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                        {
-//                          "name": "Apple",
-//                          "description": "Premium Fresh Apple",
-//                          "price": 150.00,
-//                          "category": "Fruits"
-//                        }
-//                        """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody ProductRequestDto request) {
 
         return ResponseEntity.ok(

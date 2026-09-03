@@ -1,154 +1,152 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getAllInventory,
   createInventory,
   updateInventory,
-  deleteInventory
-} from "../services/inventoryService"
-import { getAllProducts } from "../services/productService"
-import "../scss/AdminInventory.scss"
- 
+  deleteInventory,
+} from "../services/inventoryService";
+import { getAllProducts } from "../services/productService";
+import "../scss/AdminInventory.scss";
+
 function AdminInventory() {
-  const navigate = useNavigate()
- 
-  const [inventory, setInventory] = useState([])
-  const [products, setProducts] = useState([])
- 
-  const [showForm, setShowForm] = useState(false)
-  const [editProductId, setEditProductId] = useState(null)
- 
+  const navigate = useNavigate();
+
+  const [inventory, setInventory] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const [showForm, setShowForm] = useState(false);
+  const [editProductId, setEditProductId] = useState(null);
+
   const [formData, setFormData] = useState({
     productId: "",
     availableQuantity: "",
-    reservedQuantity: 0
-  })
- 
+    reservedQuantity: 0,
+  });
+
   useEffect(() => {
-    loadInventory()
-    loadProducts()
-  }, [])
- 
+    loadInventory();
+    loadProducts();
+  }, []);
+
   const loadInventory = () => {
     getAllInventory()
       .then((response) => {
-        setInventory(response.data)
+        setInventory(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching inventory", error)
-      })
-  }
- 
+        console.error("Error fetching inventory", error);
+      });
+  };
+
   const loadProducts = () => {
     getAllProducts()
       .then((response) => {
-        setProducts(response.data)
+        setProducts(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching products", error)
-      })
-  }
- 
+        console.error("Error fetching products", error);
+      });
+  };
+
   const handleAddInventory = () => {
-    setEditProductId(null)
- 
+    setEditProductId(null);
+
     setFormData({
       productId: "",
       availableQuantity: "",
-      reservedQuantity: 0
-    })
- 
-    setShowForm(true)
-  }
- 
+      reservedQuantity: 0,
+    });
+
+    setShowForm(true);
+  };
+
   const handleEdit = (item) => {
-    setEditProductId(item.productId)
- 
+    setEditProductId(item.productId);
+
     setFormData({
       productId: item.productId,
       availableQuantity: item.availableQuantity,
-      reservedQuantity: item.reservedQuantity
-    })
- 
-    setShowForm(true)
-  }
- 
+      reservedQuantity: item.reservedQuantity,
+    });
+
+    setShowForm(true);
+  };
+
   const handleChange = (event) => {
-    const { name, value } = event.target
- 
+    const { name, value } = event.target;
+
     setFormData({
       ...formData,
-      [name]: value
-    })
-  }
- 
+      [name]: value,
+    });
+  };
+
   const handleSubmit = (event) => {
-    event.preventDefault()
- 
+    event.preventDefault();
+
     const inventoryData = {
       productId: Number(formData.productId),
       availableQuantity: Number(formData.availableQuantity),
-      reservedQuantity: Number(formData.reservedQuantity)
-    }
- 
+      reservedQuantity: Number(formData.reservedQuantity),
+    };
+
     if (editProductId) {
       updateInventory(editProductId, inventoryData)
         .then(() => {
-          alert("Inventory updated successfully")
-          setShowForm(false)
-          setEditProductId(null)
-          loadInventory()
+          alert("Inventory updated successfully");
+          setShowForm(false);
+          setEditProductId(null);
+          loadInventory();
         })
         .catch((error) => {
-          console.error("Error updating inventory", error)
-        })
+          console.error("Error updating inventory", error);
+        });
     } else {
       createInventory(inventoryData)
         .then(() => {
-          alert("Inventory created successfully")
-          setShowForm(false)
-          loadInventory()
+          alert("Inventory created successfully");
+          setShowForm(false);
+          loadInventory();
         })
         .catch((error) => {
-          console.error("Error creating inventory", error)
-        })
+          console.error("Error creating inventory", error);
+        });
     }
-  }
- 
+  };
+
   const handleDelete = (productId) => {
     if (!window.confirm("Are you sure you want to delete this inventory?")) {
-      return
+      return;
     }
- 
+
     deleteInventory(productId)
       .then(() => {
-        alert("Inventory deleted successfully")
-        loadInventory()
+        alert("Inventory deleted successfully");
+        loadInventory();
       })
       .catch((error) => {
-        console.error("Error deleting inventory", error)
-      })
-  }
- 
+        console.error("Error deleting inventory", error);
+      });
+  };
+
   const handleCancel = () => {
-    setShowForm(false)
-    setEditProductId(null)
- 
+    setShowForm(false);
+    setEditProductId(null);
+
     setFormData({
       productId: "",
       availableQuantity: "",
-      reservedQuantity: 0
-    })
-  }
- 
+      reservedQuantity: 0,
+    });
+  };
+
   const getProductName = (productId) => {
-    const product = products.find(
-      (product) => product.productId === productId
-    )
- 
-    return product ? product.productName : `Product ${productId}`
-  }
- 
+    const product = products.find((product) => product.productId === productId);
+
+    return product ? product.productName : `Product ${productId}`;
+  };
+
   return (
     <div className="admin-inventory">
       <div className="admin-inventory-header">
@@ -156,7 +154,7 @@ function AdminInventory() {
           <h1>Inventory Management</h1>
           <p>Manage product stock and inventory levels</p>
         </div>
- 
+
         <div className="header-actions">
           <button
             type="button"
@@ -165,7 +163,7 @@ function AdminInventory() {
           >
             Back to Dashboard
           </button>
- 
+
           <button
             type="button"
             className="primary-button"
@@ -175,22 +173,18 @@ function AdminInventory() {
           </button>
         </div>
       </div>
- 
+
       {showForm && (
         <div className="inventory-form-card">
           <div className="form-header">
-            <h2>
-              {editProductId
-                ? "Edit Inventory"
-                : "Add Inventory"}
-            </h2>
+            <h2>{editProductId ? "Edit Inventory" : "Add Inventory"}</h2>
           </div>
- 
+
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-group">
                 <label>Product</label>
- 
+
                 <select
                   name="productId"
                   value={formData.productId}
@@ -198,24 +192,19 @@ function AdminInventory() {
                   disabled={editProductId !== null}
                   required
                 >
-                  <option value="">
-                    Select Product
-                  </option>
- 
+                  <option value="">Select Product</option>
+
                   {products.map((product) => (
-                    <option
-                      key={product.productId}
-                      value={product.productId}
-                    >
+                    <option key={product.productId} value={product.productId}>
                       {product.productName}
                     </option>
                   ))}
                 </select>
               </div>
- 
+
               <div className="form-group">
                 <label>Available Quantity</label>
- 
+
                 <input
                   type="number"
                   name="availableQuantity"
@@ -225,10 +214,10 @@ function AdminInventory() {
                   required
                 />
               </div>
- 
+
               <div className="form-group">
                 <label>Reserved Quantity</label>
- 
+
                 <input
                   type="number"
                   name="reservedQuantity"
@@ -237,17 +226,12 @@ function AdminInventory() {
                 />
               </div>
             </div>
- 
+
             <div className="form-actions">
-              <button
-                type="submit"
-                className="primary-button"
-              >
-                {editProductId
-                  ? "Update Inventory"
-                  : "Save Inventory"}
+              <button type="submit" className="primary-button">
+                {editProductId ? "Update Inventory" : "Save Inventory"}
               </button>
- 
+
               <button
                 type="button"
                 className="cancel-button"
@@ -259,7 +243,7 @@ function AdminInventory() {
           </form>
         </div>
       )}
- 
+
       <div className="inventory-table-card">
         <div className="table-header">
           <div>
@@ -267,7 +251,7 @@ function AdminInventory() {
             <span>{inventory.length} inventory records</span>
           </div>
         </div>
- 
+
         <div className="table-container">
           <table>
             <thead>
@@ -279,28 +263,28 @@ function AdminInventory() {
                 <th>Actions</th>
               </tr>
             </thead>
- 
+
             <tbody>
               {inventory.map((item) => (
                 <tr key={item.inventoryId}>
                   <td>{item.inventoryId}</td>
- 
+
                   <td className="product-name">
                     {getProductName(item.productId)}
                   </td>
- 
+
                   <td>
                     <span className="quantity available">
                       {item.availableQuantity}
                     </span>
                   </td>
- 
+
                   <td>
                     <span className="quantity reserved">
                       {item.reservedQuantity}
                     </span>
                   </td>
- 
+
                   <td>
                     <div className="action-buttons">
                       <button
@@ -310,13 +294,11 @@ function AdminInventory() {
                       >
                         Edit
                       </button>
- 
+
                       <button
                         type="button"
                         className="delete-button"
-                        onClick={() =>
-                          handleDelete(item.productId)
-                        }
+                        onClick={() => handleDelete(item.productId)}
                       >
                         Delete
                       </button>
@@ -329,7 +311,7 @@ function AdminInventory() {
         </div>
       </div>
     </div>
-  )
+  );
 }
- 
-export default AdminInventory
+
+export default AdminInventory;

@@ -3,7 +3,6 @@ package com.grocery.productcatalogservice.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-@Schema(name = "Category", description = "Category Details")
 public record CategoryDto (
     Long categoryId,
 

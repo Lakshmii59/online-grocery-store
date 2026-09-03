@@ -123,7 +123,8 @@ class CustomerServiceImplTest {
                 1L,
                 "Lakshmi Devi",
                 "lakshmi123@gmail.com",
-                "9999999999"
+                "9999999999",
+                "customer"
         );
 
         when(customerRepo.findById(1L)).thenReturn(Optional.of(existing));
@@ -144,7 +145,8 @@ class CustomerServiceImplTest {
                 1L,
                 "Lakshmi",
                 "lakshmi@gmail.com",
-                "9876543210"
+                "9876543210",
+                "customer"
         );
 
         when(customerRepo.findById(1L)).thenReturn(Optional.empty());

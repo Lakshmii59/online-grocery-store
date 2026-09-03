@@ -28,15 +28,6 @@ public class CustomerController {
     @Operation(summary = "Create Customer", description = "Creates a new customer.")
     @PostMapping
     public ResponseEntity<CustomerDto> createCustomer(
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = CustomerDto.class),
-//                            examples = @ExampleObject(
-//                                    value = "{\"customerName\":\"Lakshmi\",\"email\":\"lakshmi@gmail.com\",\"phone\":\"9876543210\"}"
-//                            )
-//                    )
-//            )
             @Valid @RequestBody CustomerRegisterRequestDto request) {
         return new ResponseEntity<>(customerService.createCustomer(request), HttpStatus.CREATED);
     }
@@ -57,21 +48,6 @@ public class CustomerController {
     @PutMapping("/{customerId}")
     public ResponseEntity<CustomerDto> updateCustomer(
             @PathVariable("customerId") Long customerId,
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = CustomerDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                                {
-//                                  "customerName": "Lakshmi",
-//                                  "email": "lakshmi123@gmail.com",
-//                                  "phone": "9876543210"
-//                                }
-//                                """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody CustomerDto customerDto) {
 
         return ResponseEntity.ok(customerService.updateCustomer(customerId, customerDto));

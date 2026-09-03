@@ -129,6 +129,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CustomerAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto>handleCustomerAlreadyExistsException(CustomerAlreadyExistsException ex){
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .errorCode("CUSTOMER_ALREADY_EXISTS")
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto>handleInvalidCredentialsException(InvalidCredentialsException ex){
+        ErrorResponseDto error = ErrorResponseDto.builder()
+                .errorCode("INVALID_CREDENTIALS")
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDto> handleValidationException(
             MethodArgumentNotValidException ex) {

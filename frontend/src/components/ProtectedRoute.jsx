@@ -1,17 +1,17 @@
-import { Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children, role}){
-    const customer = JSON.parse(localStorage.getItem("customer"))
+function ProtectedRoute({ children, role }) {
+  const customer = JSON.parse(localStorage.getItem("customer"));
 
-    if(!customer){
-        return <Navigate to="/login" replace/>
-    }
+  if (!customer) {
+    return <Navigate to="/login" replace />;
+  }
 
-    if(role && customer.role !== role){
-        return <Navigate to="/" replace/>
-    }
+  if (role && customer.role !== role) {
+    return <Navigate to="/" replace />;
+  }
 
-    return children
+  return children;
 }
 
-export default ProtectedRoute
+export default ProtectedRoute;

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-public class GroceryOrderRepoTest {
+class GroceryOrderRepoTest {
 
     @Autowired
     private GroceryOrderRepo groceryOrderRepo;

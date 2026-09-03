@@ -1,119 +1,119 @@
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getAllCategories,
   createCategory,
   updateCategory,
-  deleteCategory
-} from "../services/categoryService"
-import "../scss/AdminCategories.scss"
- 
+  deleteCategory,
+} from "../services/categoryService";
+import "../scss/AdminCategories.scss";
+
 function AdminCategories() {
-  const navigate = useNavigate()
- 
-  const [categories, setCategories] = useState([])
-  const [showForm, setShowForm] = useState(false)
-  const [editCategoryId, setEditCategoryId] = useState(null)
- 
+  const navigate = useNavigate();
+
+  const [categories, setCategories] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [editCategoryId, setEditCategoryId] = useState(null);
+
   const [formData, setFormData] = useState({
     categoryName: "",
-    description: ""
-  })
- 
+    description: "",
+  });
+
   useEffect(() => {
-    loadCategories()
-  }, [])
- 
+    loadCategories();
+  }, []);
+
   const loadCategories = () => {
     getAllCategories()
       .then((response) => {
-        setCategories(response.data)
+        setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching categories", error)
-      })
-  }
- 
+        console.error("Error fetching categories", error);
+      });
+  };
+
   const handleAddCategory = () => {
-    setEditCategoryId(null)
- 
+    setEditCategoryId(null);
+
     setFormData({
       categoryName: "",
-      description: ""
-    })
- 
-    setShowForm(true)
-  }
- 
+      description: "",
+    });
+
+    setShowForm(true);
+  };
+
   const handleEdit = (category) => {
-    setEditCategoryId(category.categoryId)
- 
+    setEditCategoryId(category.categoryId);
+
     setFormData({
       categoryName: category.categoryName,
-      description: category.description
-    })
- 
-    setShowForm(true)
-  }
- 
+      description: category.description,
+    });
+
+    setShowForm(true);
+  };
+
   const handleChange = (event) => {
-    const { name, value } = event.target
- 
+    const { name, value } = event.target;
+
     setFormData({
       ...formData,
-      [name]: value
-    })
-  }
- 
+      [name]: value,
+    });
+  };
+
   const handleSubmit = (event) => {
-    event.preventDefault()
- 
+    event.preventDefault();
+
     if (editCategoryId) {
       updateCategory(editCategoryId, formData)
         .then(() => {
-          setShowForm(false)
-          setEditCategoryId(null)
-          loadCategories()
+          setShowForm(false);
+          setEditCategoryId(null);
+          loadCategories();
         })
         .catch((error) => {
-          console.error("Error updating category", error)
-        })
+          console.error("Error updating category", error);
+        });
     } else {
       createCategory(formData)
         .then(() => {
-          setShowForm(false)
-          loadCategories()
+          setShowForm(false);
+          loadCategories();
         })
         .catch((error) => {
-          console.error("Error creating category", error)
-        })
+          console.error("Error creating category", error);
+        });
     }
-  }
- 
+  };
+
   const handleDelete = (categoryId) => {
     if (!window.confirm("Are you sure you want to delete this category?")) {
-      return
+      return;
     }
- 
+
     deleteCategory(categoryId)
       .then(() => {
-        loadCategories()
+        loadCategories();
       })
       .catch((error) => {
-        console.error("Error deleting category", error)
-      })
-  }
- 
+        console.error("Error deleting category", error);
+      });
+  };
+
   const handleCancel = () => {
-    setShowForm(false)
-    setEditCategoryId(null)
- 
+    setShowForm(false);
+    setEditCategoryId(null);
+
     setFormData({
       categoryName: "",
-      description: ""
-    })
-  }
- 
+      description: "",
+    });
+  };
+
   return (
     <div className="admin-categories">
       <div className="admin-categories-header">
@@ -121,7 +121,7 @@ function AdminCategories() {
           <h1>Category Management</h1>
           <p>Organize your FreshNest products by category</p>
         </div>
- 
+
         <div className="header-actions">
           <button
             type="button"
@@ -130,7 +130,7 @@ function AdminCategories() {
           >
             Back to Dashboard
           </button>
- 
+
           <button
             type="button"
             className="primary-button"
@@ -140,19 +140,17 @@ function AdminCategories() {
           </button>
         </div>
       </div>
- 
+
       {showForm && (
         <div className="category-form-card">
           <div className="form-header">
-            <h2>
-              {editCategoryId ? "Edit Category" : "Add Category"}
-            </h2>
+            <h2>{editCategoryId ? "Edit Category" : "Add Category"}</h2>
           </div>
- 
+
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Category Name</label>
- 
+
               <input
                 type="text"
                 name="categoryName"
@@ -162,10 +160,10 @@ function AdminCategories() {
                 required
               />
             </div>
- 
+
             <div className="form-group">
               <label>Description</label>
- 
+
               <textarea
                 name="description"
                 value={formData.description}
@@ -174,17 +172,12 @@ function AdminCategories() {
                 rows="4"
               />
             </div>
- 
+
             <div className="form-actions">
-              <button
-                type="submit"
-                className="primary-button"
-              >
-                {editCategoryId
-                  ? "Update Category"
-                  : "Save Category"}
+              <button type="submit" className="primary-button">
+                {editCategoryId ? "Update Category" : "Save Category"}
               </button>
- 
+
               <button
                 type="button"
                 className="cancel-button"
@@ -196,7 +189,7 @@ function AdminCategories() {
           </form>
         </div>
       )}
- 
+
       <div className="category-table-card">
         <div className="table-header">
           <div>
@@ -204,7 +197,7 @@ function AdminCategories() {
             <span>{categories.length} categories</span>
           </div>
         </div>
- 
+
         <div className="table-container">
           <table>
             <thead>
@@ -215,20 +208,18 @@ function AdminCategories() {
                 <th>Actions</th>
               </tr>
             </thead>
- 
+
             <tbody>
               {categories.map((category) => (
                 <tr key={category.categoryId}>
                   <td>{category.categoryId}</td>
- 
-                  <td className="category-name">
-                    {category.categoryName}
-                  </td>
- 
+
+                  <td className="category-name">{category.categoryName}</td>
+
                   <td className="category-description">
                     {category.description || "—"}
                   </td>
- 
+
                   <td>
                     <div className="action-buttons">
                       <button
@@ -238,13 +229,11 @@ function AdminCategories() {
                       >
                         Edit
                       </button>
- 
+
                       <button
                         type="button"
                         className="delete-button"
-                        onClick={() =>
-                          handleDelete(category.categoryId)
-                        }
+                        onClick={() => handleDelete(category.categoryId)}
                       >
                         Delete
                       </button>
@@ -257,7 +246,7 @@ function AdminCategories() {
         </div>
       </div>
     </div>
-  )
+  );
 }
- 
-export default AdminCategories
+
+export default AdminCategories;

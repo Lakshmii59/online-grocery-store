@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-public class InventoryRepoTest {
+class InventoryRepoTest {
 
     @Autowired
     private InventoryRepo inventoryRepo;

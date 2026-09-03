@@ -4,10 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 
-@Schema(
-        name = "Product Response",
-        description = "Product response details"
-)
 public record ProductResponseDto(
 
         @Schema(description = "Product ID", example = "1")

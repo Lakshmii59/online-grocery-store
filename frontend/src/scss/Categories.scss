@@ -1,12 +1,12 @@
 .categories-container {
   padding: 40px;
   text-align: center;
- 
+
   h1 {
     margin-bottom: 35px;
     font-size: 32px;
   }
- 
+
   .categories-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -14,7 +14,7 @@
     max-width: 1000px;
     margin: 0 auto;
   }
- 
+
   .category-card {
     padding: 25px;
     border: 1px solid #ddd;
@@ -22,16 +22,16 @@
     background: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     min-height: 150px;
- 
+
     h2 {
       margin-bottom: 12px;
     }
- 
+
     p {
       color: #666;
       margin-bottom: 20px;
     }
- 
+
     button {
       padding: 8px 16px;
       border: none;

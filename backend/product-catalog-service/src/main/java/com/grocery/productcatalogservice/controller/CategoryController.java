@@ -44,20 +44,6 @@ public class CategoryController {
     })
     @PostMapping
     public ResponseEntity<CategoryResponseDto> createCategory(
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = CategoryRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                                {
-//                                  "categoryName": "Fruits",
-//                                  "description": "Fresh fruits category"
-//                                }
-//                                """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody CategoryRequestDto request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -103,20 +89,6 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryResponseDto> updateCategory(
             @PathVariable("categoryId") Long categoryId,
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = CategoryRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                                {
-//                                  "categoryName": "Vegetables",
-//                                  "description": "Fresh vegetables category"
-//                                }
-//                                """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
 
         return ResponseEntity.ok(productService.updateCategory(categoryId, categoryRequestDto));

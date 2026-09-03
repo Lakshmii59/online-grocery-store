@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-@Schema(name = "Product", description = "Product Details")
 public record ProductDto (
 
     @Schema(description = "Product ID", example = "1")

@@ -8,10 +8,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-@Schema(
-        name = "Product Request",
-        description = "Product request details"
-)
 public record ProductRequestDto(
 
         @NotBlank(message = "Product name is required")

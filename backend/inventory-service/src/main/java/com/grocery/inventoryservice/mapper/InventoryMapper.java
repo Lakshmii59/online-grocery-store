@@ -4,11 +4,8 @@ import com.grocery.inventoryservice.dto.InventoryRequestDto;
 import com.grocery.inventoryservice.dto.InventoryResponseDto;
 import com.grocery.inventoryservice.entity.Inventory;
 
-
 public class InventoryMapper {
-    private  InventoryMapper(){
-    }
-
+    private InventoryMapper(){}
     public static InventoryResponseDto toResponseDto(Inventory inventory){
         return new InventoryResponseDto(
                 inventory.getInventoryId(),

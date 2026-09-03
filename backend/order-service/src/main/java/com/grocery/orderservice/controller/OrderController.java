@@ -29,29 +29,6 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(
             @Parameter(description = "Order Id", example = "1")
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = OrderRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                        {
-//                          "customerId": 1,
-//                          "orderItems": [
-//                            {
-//                              "productId": 101,
-//                              "quantity": 2
-//                            },
-//                            {
-//                              "productId": 102,
-//                              "quantity": 1
-//                            }
-//                          ]
-//                        }
-//                        """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody OrderRequestDto requestDto) {
         return new ResponseEntity<>(orderService.createOrder(requestDto), HttpStatus.CREATED);
     }
@@ -81,29 +58,6 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> updateOrder(
             @Parameter(description = "Order ID",example = "1")
             @PathVariable("orderId") Long orderId,
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = OrderRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                                {
-//                                  "customerId": 1,
-//                                  "orderItems": [
-//                                    {
-//                                      "productId": 101,
-//                                      "quantity": 3
-//                                    },
-//                                    {
-//                                      "productId": 102,
-//                                      "quantity": 1
-//                                    }
-//                                  ]
-//                                }
-//                                """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody OrderRequestDto requestDto) {
 
         return ResponseEntity.ok(orderService.updateOrder(orderId, requestDto));

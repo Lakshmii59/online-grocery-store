@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceImplTest {
+class ProductServiceImplTest {
 
     @Mock
     private ProductRepo productRepo;
@@ -104,6 +104,7 @@ public class ProductServiceImplTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -158,6 +159,7 @@ public class ProductServiceImplTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -188,6 +190,7 @@ public class ProductServiceImplTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 
@@ -204,6 +207,7 @@ public class ProductServiceImplTest {
                 new BigDecimal("120"),
                 20,
                 true,
+                "/images/apple.jpg",
                 1L
         );
 

@@ -1,68 +1,60 @@
-import { useEffect, useState } from "react"
-import { getInventoryByProductId } from "../services/inventoryService"
-import "../scss/ProductCard.scss"
-import { useCart } from "../CartContext"
- 
+import { useEffect, useState } from "react";
+import { getInventoryByProductId } from "../services/inventoryService";
+import "../scss/ProductCard.scss";
+import { useCart } from "../CartContext";
+
 function ProductCard({ product }) {
-  const { addToCart } = useCart()
- 
-  const [availableQuantity, setAvailableQuantity] = useState(null)
-  const [message, setMessage] = useState("")
- 
+  const { addToCart } = useCart();
+
+  const [availableQuantity, setAvailableQuantity] = useState(null);
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     getInventoryByProductId(product.productId)
       .then((response) => {
-        setAvailableQuantity(response.data.availableQuantity)
+        setAvailableQuantity(response.data.availableQuantity);
       })
       .catch((error) => {
-        console.error("Error fetching inventory:", error)
-        setAvailableQuantity(0)
-      })
-  }, [product.productId])
- 
+        console.error("Error fetching inventory:", error);
+        setAvailableQuantity(0);
+      });
+  }, [product.productId]);
+
   const handleAddToCart = () => {
     if (availableQuantity === 0) {
-      setMessage("Out of Stock")
-      return
+      setMessage("Out of Stock");
+      return;
     }
- 
-    addToCart(product)
-    setMessage("Product added to cart!")
- 
+
+    addToCart(product);
+    setMessage("Product added to cart!");
+
     setTimeout(() => {
-      setMessage("")
-    }, 2000)
-  }
- 
+      setMessage("");
+    }, 2000);
+  };
+
   return (
     <div className="product-card">
-      <img
-        src={product.imageUrl}
-        alt={product.productName}
-      />
- 
+      <img src={product.imageUrl} alt={product.productName} />
+
       <h3>{product.productName}</h3>
- 
+
       <p>Price: ₹{product.price}</p>
- 
+
       {availableQuantity === null ? (
         <p>Checking stock...</p>
       ) : availableQuantity === 0 ? (
         <p className="out-of-stock">Out of Stock</p>
       ) : (
-        <button
-          type="button"
-          onClick={handleAddToCart}
-        >
+        <button type="button" onClick={handleAddToCart}>
           Add to Cart
         </button>
       )}
- 
-      {message && (
-        <p className="cart-message">{message}</p>
-      )}
+
+      {message && <p className="cart-message">{message}</p>}
     </div>
-  )
+  );
 }
- 
-export default ProductCard
+
+export default ProductCard;

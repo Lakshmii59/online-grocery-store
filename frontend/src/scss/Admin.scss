@@ -3,30 +3,30 @@
   margin: 0 auto;
   padding: 50px 50px 80px;
   color: #263238;
- 
+
   .admin-header {
     margin-bottom: 40px;
     text-align: center;
- 
+
     h1 {
       margin: 0 0 10px;
       font-size: 40px;
       font-weight: 700;
     }
- 
+
     p {
       margin: 0;
       color: #6b7280;
       font-size: 17px;
     }
   }
- 
+
   .admin-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 50px;
- 
+
     .admin-card {
       display: flex;
       flex-direction: column;
@@ -38,13 +38,13 @@
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(38, 50, 56, 0.07);
       transition: 0.2s ease;
- 
+
       &:hover {
         border-color: #b8cdbd;
         box-shadow: 0 8px 22px rgba(38, 50, 56, 0.1);
         transform: translateY(-3px);
       }
- 
+
       .card-content {
         h2 {
           margin: 0 0 10px;
@@ -52,7 +52,7 @@
           font-weight: 600;
           color: #263238;
         }
- 
+
         p {
           margin: 0;
           color: #6b756e;
@@ -60,7 +60,7 @@
           line-height: 1.5;
         }
       }
- 
+
       button {
         align-self: flex-start;
         margin-top: 25px;
@@ -73,32 +73,32 @@
         font-weight: 600;
         cursor: pointer;
         transition: 0.2s;
- 
+
         &:hover {
           background-color: #245431;
         }
       }
     }
   }
- 
+
   .admin-actions {
     padding: 28px;
     background-color: #ffffff;
     border: 1px solid #e0e6e1;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(38, 50, 56, 0.07);
- 
+
     h2 {
       margin: 0 0 22px;
       font-size: 22px;
       font-weight: 600;
     }
- 
+
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
- 
+
       button {
         padding: 11px 20px;
         border: 1px solid #cbd5cf;
@@ -109,7 +109,7 @@
         font-weight: 600;
         cursor: pointer;
         transition: 0.2s;
- 
+
         &:hover {
           background-color: #e2eee5;
           border-color: #9db5a2;
@@ -117,7 +117,7 @@
       }
     }
   }
- 
+
   .logout-button {
     display: block;
     margin: 30px auto 0;
@@ -130,49 +130,49 @@
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
- 
+
     &:hover {
       background-color: #fde8e8;
     }
   }
 }
- 
+
 @media (max-width: 900px) {
   .admin {
     padding: 40px 25px 60px;
- 
+
     .admin-cards {
       grid-template-columns: 1fr;
     }
   }
 }
- 
+
 @media (max-width: 500px) {
   .admin {
     padding: 30px 15px 50px;
- 
+
     .admin-header {
       h1 {
         font-size: 30px;
       }
- 
+
       p {
         font-size: 15px;
       }
     }
- 
+
     .admin-cards {
       .admin-card {
         padding: 22px;
       }
     }
- 
+
     .admin-actions {
       padding: 22px;
- 
+
       .quick-actions {
         flex-direction: column;
- 
+
         button {
           width: 100%;
         }

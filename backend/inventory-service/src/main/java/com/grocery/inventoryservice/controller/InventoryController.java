@@ -65,21 +65,6 @@ public class InventoryController {
     })
     @PostMapping
     public ResponseEntity<InventoryResponseDto> createInventory(
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = InventoryRequestDto.class),
-//                            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
-//                                    value = """
-//                                            {
-//                                              "productId": 1,
-//                                              "availableQuantity": 100,
-//                                              "reservedQuantity": 10
-//                                            }
-//                                            """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody InventoryRequestDto request) {
         return new ResponseEntity<>(
                 inventoryService.createInventory(request),
@@ -147,23 +132,7 @@ public class InventoryController {
     })
     @PutMapping("/{productId}")
     public ResponseEntity<InventoryResponseDto> updateInventory(
-          //  @Parameter(description = "Product Identifier", example = "101")
             @PathVariable("productId") Long productId,
-//            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//                    required = true,
-//                    content = @Content(
-//                            schema = @Schema(implementation = InventoryRequestDto.class),
-//                            examples = @ExampleObject(
-//                                    value = """
-//                        {
-//                          "productId": 1,
-//                          "availableQuantity": 150,
-//                          "reservedQuantity": 20
-//                        }
-//                        """
-//                            )
-//                    )
-//            )
             @Valid @RequestBody InventoryRequestDto request) {
 
         return ResponseEntity.ok(
@@ -202,9 +171,6 @@ public class InventoryController {
 
             @Parameter(description = "Quantity to confirm", example = "5")
             @RequestParam("quantity") Integer quantity) {
-
-//        inventoryService.confirmInventory(productId, quantity);
-
         return ResponseEntity.ok(inventoryService.confirmInventory(productId, quantity));
     }
 
