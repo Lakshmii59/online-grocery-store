@@ -8,7 +8,7 @@ import java.util.List;
 
 public record OrderRequestDto (
     @NotNull(message = "Customer Id is required")
-     Long customerId,
+    Long customerId,
 
     @Valid
     @NotEmpty(message = "Order must contain atleast one item")

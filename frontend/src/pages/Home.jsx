@@ -33,7 +33,7 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-content">
+         <div className="hero-content">
           <span className="hero-tag">Fresh • Quality • Delivered</span>
 
           <h1>

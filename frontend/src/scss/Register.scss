@@ -122,6 +122,14 @@
   }
 }
 
+.error-message{
+  margin: 6px 0 0;
+  color: #c47f17;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 @media (max-width: 500px) {
   .register-page {
     padding: 35px 15px;
