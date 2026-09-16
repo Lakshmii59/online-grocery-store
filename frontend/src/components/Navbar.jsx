@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useCart } from "../CartContext";
 import "../scss/Navbar.scss";
 
 function Navbar() {
@@ -10,6 +11,10 @@ function Navbar() {
   const [customer, setCustomer] = useState(
     JSON.parse(localStorage.getItem("customer")),
   );
+
+  const { cart } = useCart();
+  const totalItems = cart.reduce(
+    (total, item) => total + item.quantity,0,);
 
   useEffect(() => {
     const updateCustomer = () => {
@@ -66,7 +71,12 @@ function Navbar() {
         ) : (
           <>
             <Link to="/cart" className="cart-link">
-              🛒 Cart
+            <span className="cart-icon">🛒
+              {totalItems > 0 && (
+              <span className="cart-count">{totalItems}</span>
+            )}
+            </span>
+            <span>Cart</span>
             </Link>
 
             {customer ? (
