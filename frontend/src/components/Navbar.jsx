@@ -56,8 +56,6 @@ function Navbar() {
       <div className="nav-links">
         {customer?.role === "ADMIN" ? (
           <>
-            <Link to="/admin/products">Products</Link>
-            <Link to="/admin/categories">Categories</Link>
             <Link to="/admin/inventory">Inventory</Link>
             <Link to="/admin/orders">Orders</Link>
 

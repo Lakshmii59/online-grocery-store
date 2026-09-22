@@ -13,11 +13,6 @@ public record InventoryRequestDto(
         @NotNull(message = "Available quantity is required")
         @Min(value = 0, message = "Available quantity cannot be negative")
         @Schema(example = "100")
-        Integer availableQuantity,
-
-        @NotNull(message = "Reserved quantity is required")
-        @Min(value = 0, message = "Reserved quantity cannot be negative")
-        @Schema(example = "10")
-        Integer reservedQuantity
+        Integer availableQuantity
 
 ) {}

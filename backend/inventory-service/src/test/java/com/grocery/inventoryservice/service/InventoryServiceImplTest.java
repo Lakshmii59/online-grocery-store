@@ -37,15 +37,13 @@ class InventoryServiceImplTest {
 
         InventoryRequestDto request = new InventoryRequestDto(
                 1L,
-                100,
-                0
+                100
         );
 
         Inventory inventory = Inventory.builder()
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findByProductId(1L)).thenReturn(Optional.empty());
@@ -68,7 +66,6 @@ class InventoryServiceImplTest {
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(50)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findByProductId(1L))
@@ -76,8 +73,7 @@ class InventoryServiceImplTest {
 
         InventoryRequestDto request = new InventoryRequestDto(
                 1L,
-                100,
-                0
+                100
         );
 
         assertThrows(
@@ -96,7 +92,6 @@ class InventoryServiceImplTest {
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(80)
-                .reservedQuantity(10)
                 .build();
 
         when(inventoryRepo.findByProductId(1L))
@@ -107,8 +102,6 @@ class InventoryServiceImplTest {
 
         assertEquals(1L, dto.productId());
         assertEquals(80, dto.availableQuantity());
-        assertEquals(10, dto.reservedQuantity());
-
     }
 
     @Test
@@ -118,7 +111,6 @@ class InventoryServiceImplTest {
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findAll())
@@ -139,13 +131,11 @@ class InventoryServiceImplTest {
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         InventoryRequestDto request = new InventoryRequestDto(
                 1L,
-                100,
-                0
+                100
         );
 
         when(inventoryRepo.findByProductId(1L))
@@ -164,28 +154,29 @@ class InventoryServiceImplTest {
     }
 
     @Test
-    void reserveInventorySuccess() {
+    void decreaseStockSuccess() {
 
         Inventory inventory = Inventory.builder()
                 .inventoryId(1L)
                 .productId(1L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findByProductId(1L))
                 .thenReturn(Optional.of(inventory));
 
-        when(inventoryRepo.save(any()))
+        when(inventoryRepo.save(any(Inventory.class)))
                 .thenReturn(inventory);
 
-        InventoryResponseDto dto =
-                inventoryService.reserveInventory(1L, 20);
+        InventoryResponseDto result =
+                inventoryService.decreaseStock(1L, 20);
 
-        assertNotNull(dto);
+        assertNotNull(result);
+        assertEquals(1L, result.productId());
+        assertEquals(80, result.availableQuantity());
 
+        verify(inventoryRepo).save(inventory);
         verify(stockMovementRepo).save(any());
-
     }
 
     @Test
@@ -209,7 +200,6 @@ class InventoryServiceImplTest {
         Inventory inventory = Inventory.builder()
                 .productId(1L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findByProductId(1L)).thenReturn(Optional.of(inventory));
@@ -223,12 +213,12 @@ class InventoryServiceImplTest {
         Inventory inventory = Inventory.builder()
                 .productId(1L)
                 .availableQuantity(10)
-                .reservedQuantity(0)
                 .build();
 
         when(inventoryRepo.findByProductId(1L)).thenReturn(Optional.of(inventory));
 
         assertFalse(inventoryService.checkStock(1L, 50));
     }
+
 }
 

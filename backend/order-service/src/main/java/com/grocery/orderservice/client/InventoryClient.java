@@ -13,18 +13,9 @@ public interface InventoryClient {
     @GetMapping("/api/inventory/{productId}")
     InventoryDto getInventory(@PathVariable("productId") Long productId);
 
-    @PutMapping("/api/inventory/{productId}/reserve")
-    InventoryDto reserveInventory(
+    @PutMapping("/api/inventory/{productId}/decrease")
+    InventoryDto decreaseStock(
             @PathVariable("productId") Long productId,
             @RequestParam("quantity") Integer quantity);
 
-    @PutMapping("/api/inventory/{productId}/release")
-    InventoryDto releaseInventory(
-            @PathVariable("productId") Long productId,
-            @RequestParam("quantity") Integer quantity);
-
-    @PutMapping("/api/inventory/{productId}/confirm")
-    InventoryDto confirmInventory(
-            @PathVariable("productId") Long productId,
-            @RequestParam("quantity") Integer quantity);
 }

@@ -36,15 +36,13 @@ class InventoryControllerTest {
 
         InventoryRequestDto request = new InventoryRequestDto(
                 1L,
-                100,
-                0
+                100
         );
 
         InventoryResponseDto response = new InventoryResponseDto(
                 1L,
                 1L,
-                100,
-                0
+                100
         );
 
         when(inventoryService.createInventory(any(InventoryRequestDto.class)))
@@ -64,8 +62,7 @@ class InventoryControllerTest {
         InventoryResponseDto response = new InventoryResponseDto(
                 1L,
                 1L,
-                100,
-                0
+                100
         );
 
         when(inventoryService.getAllInventory())
@@ -82,8 +79,7 @@ class InventoryControllerTest {
         InventoryResponseDto response = new InventoryResponseDto(
                 1L,
                 1L,
-                100,
-                0
+                100
         );
 
         when(inventoryService.getInventoryByProductId(101L))
@@ -99,15 +95,13 @@ class InventoryControllerTest {
 
         InventoryRequestDto request = new InventoryRequestDto(
                 1L,
-                100,
-                0
+                100
         );
 
         InventoryResponseDto response = new InventoryResponseDto(
                 1L,
                 1L,
-                100,
-                0
+                100
         );
 
         when(inventoryService.updateInventory(eq(101L), any(InventoryRequestDto.class)))
@@ -121,69 +115,11 @@ class InventoryControllerTest {
     }
 
     @Test
-    void reserveInventorySuccess() throws Exception {
-
-        InventoryResponseDto response = new InventoryResponseDto(
-                1L,
-                1L,
-                95,
-                5
-        );
-
-        when(inventoryService.reserveInventory(101L, 5))
-                .thenReturn(response);
-
-        mockMvc.perform(put("/api/inventory/101/reserve")
-                        .param("quantity", "5"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.reservedQuantity").value(5));
-    }
-
-    @Test
-    void releaseInventorySuccess() throws Exception {
-
-        InventoryResponseDto response = new InventoryResponseDto(
-                1L,
-                1L,
-                100,
-                0
-        );
-
-        when(inventoryService.releaseInventory(101L, 5))
-                .thenReturn(response);
-
-        mockMvc.perform(put("/api/inventory/101/release")
-                        .param("quantity", "5"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.availableQuantity").value(100));
-    }
-
-    @Test
-    void confirmInventorySuccess() throws Exception {
-
-        InventoryResponseDto response = new InventoryResponseDto(
-                1L,
-                1L,
-                95,
-                0
-        );
-
-        when(inventoryService.confirmInventory(101L, 5))
-                .thenReturn(response);
-
-        mockMvc.perform(put("/api/inventory/101/confirm")
-                        .param("quantity", "5"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId").value(1L));
-    }
-
-    @Test
     void deleteInventorySuccess() throws Exception {
 
         mockMvc.perform(delete("/api/inventory/101"))
                 .andExpect(status().isNoContent());
     }
-
 
     @Test
     void checkStockSuccess() throws Exception {
@@ -194,6 +130,25 @@ class InventoryControllerTest {
         mockMvc.perform(get("/api/inventory/check/101/5"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
+    }
+
+    @Test
+    void decreaseStockSuccess() throws Exception {
+
+        InventoryResponseDto response = new InventoryResponseDto(
+                1L,
+                101L,
+                95
+        );
+
+        when(inventoryService.decreaseStock(101L, 5))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/inventory/101/decrease")
+                        .param("quantity", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId").value(101L))
+                .andExpect(jsonPath("$.availableQuantity").value(95));
     }
 
 }

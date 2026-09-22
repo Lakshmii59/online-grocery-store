@@ -58,14 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new ProductInactiveException("Product '" + product.productName() + "' is inactive and cannot be ordered.");
             }
 
-            InventoryDto inventory = inventoryClient.getInventory(itemDto.productId());
-
-            if (inventory.availableQuantity() < itemDto.quantity()) {
-                throw new InsufficientStockException("Insufficient stock");
-            }
-
-
-            inventoryClient.reserveInventory(
+            inventoryClient.decreaseStock(
                     itemDto.productId(),
                     itemDto.quantity());
 
@@ -156,44 +149,7 @@ public class OrderServiceImpl implements OrderService {
             throw new InvalidOrderStatusException("Delivered orders cannot be cancelled");
         }
 
-            for (OrderItem item : order.getOrderItems()) {
-                inventoryClient.releaseInventory(
-                        item.getProductId(),
-                        item.getQuantity());
-            }
-
-
         order.setOrderStatus("CANCELLED");
         groceryOrderRepo.save(order);
-    }
-
-    @Override
-    public OrderResponseDto confirmOrder(Long orderId) {
-
-        GroceryOrder order = groceryOrderRepo.findById(orderId)
-                .orElseThrow(() ->
-                        new OrderNotFoundException("Order not found"));
-
-        if ("CANCELLED".equals(order.getOrderStatus())) {
-            throw new IllegalStateException("Cancelled orders cannot be confirmed");
-        }
-
-        if ("DELIVERED".equals(order.getOrderStatus())) {
-            throw new IllegalStateException("Order is already delivered");
-        }
-
-        for (OrderItem item : order.getOrderItems()) {
-
-            inventoryClient.confirmInventory(
-                    item.getProductId(),
-                    item.getQuantity()
-            );
-        }
-
-        order.setOrderStatus("CONFIRMED");
-
-        GroceryOrder saved = groceryOrderRepo.save(order);
-
-        return OrderMapper.toDto(saved);
     }
 }

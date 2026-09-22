@@ -23,7 +23,6 @@ class InventoryRepoTest {
         Inventory inventory = Inventory.builder()
                 .productId(101L)
                 .availableQuantity(100)
-                .reservedQuantity(0)
                 .build();
 
         inventoryRepo.save(inventory);

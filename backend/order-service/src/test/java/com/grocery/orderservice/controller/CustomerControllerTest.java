@@ -7,7 +7,6 @@ import com.grocery.orderservice.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,10 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +40,8 @@ class CustomerControllerTest {
                 1L,
                 "Lakshmi",
                 "lakshmi@gmail.com",
-                "9876543210"
+                "9876543210",
+                "CUSTOMER"
         );
 
         when(customerService.createCustomer(any(CustomerRegisterRequestDto.class)))
@@ -65,7 +62,8 @@ class CustomerControllerTest {
                 1L,
                 "Lakshmi",
                 "lakshmi@gmail.com",
-                "9876543210"
+                "9876543210",
+                "CUSTOMER"
         );
 
         when(customerService.getCustomerById(1L))
@@ -84,7 +82,8 @@ class CustomerControllerTest {
                 1L,
                 "Lakshmi",
                 "lakshmi@gmail.com",
-                "9876543210"
+                "9876543210",
+                "CUSTOMER"
         );
 
         when(customerService.getAllCustomers())
@@ -102,7 +101,8 @@ class CustomerControllerTest {
                 1L,
                 "Lakshmi",
                 "lakshmi123@gmail.com",
-                "9876543210"
+                "9876543210",
+                "CUSTOMER"
         );
 
         when(customerService.updateCustomer(eq(1L), any(CustomerDto.class)))

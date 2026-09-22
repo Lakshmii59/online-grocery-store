@@ -2,7 +2,6 @@ package com.grocery.productcatalogservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -25,11 +24,6 @@ public record ProductDto (
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
     @Schema(description = "Product Price",example = "120.50")
      BigDecimal price,
-
-    @NotNull(message = "Available quantity is required")
-    @Min(value = 0, message = "Available quantity cannot be negative")
-    @Schema(description = "Available stock",example = "100")
-     Integer availableQuantity,
 
     @NotNull(message = "Active status is required")
     @Schema(description = "Product Status",example = "true")

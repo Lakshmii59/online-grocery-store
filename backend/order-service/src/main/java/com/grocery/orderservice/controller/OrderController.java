@@ -45,14 +45,6 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @Operation(summary = "Confirm Order", description = "Confirms an order abd deducts reserved inventory")
-    @PutMapping("/{orderId}/confirm")
-    public ResponseEntity<OrderResponseDto> confirmOrder(
-            @PathVariable("orderId") Long orderId) {
-
-        return ResponseEntity.ok(orderService.confirmOrder(orderId));
-    }
-
     @Operation(summary = "Update Order", description = "Updates an existing order.")
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(

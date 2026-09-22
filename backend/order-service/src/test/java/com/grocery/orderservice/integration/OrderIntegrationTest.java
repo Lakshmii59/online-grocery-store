@@ -1,6 +1,7 @@
 package com.grocery.orderservice.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grocery.commonlibrary.exception.InsufficientStockException;
 import com.grocery.orderservice.client.InventoryClient;
 import com.grocery.orderservice.client.ProductClient;
 import com.grocery.orderservice.dto.InventoryDto;
@@ -21,8 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,6 +53,7 @@ class OrderIntegrationTest {
             customer.setCustomerName("Lakshmi");
             customer.setEmail("lakshmi@email.com");
             customer.setPhone("9876543216");
+            customer.setRole("CUSTOMER");
 
             customerRepo.save(customer);
         }
@@ -76,13 +76,11 @@ class OrderIntegrationTest {
         InventoryDto inventory = new InventoryDto(
                 1L,
                 1L,
-                20,
-                0
+                20
         );
 
         when(productClient.getProductById(1L)).thenReturn(product);
-        when(inventoryClient.getInventory(1L)).thenReturn(inventory);
-        when(inventoryClient.reserveInventory(eq(1L), anyInt())).thenReturn(inventory);
+        when(inventoryClient.decreaseStock(1L,2)).thenReturn(inventory);
 
         OrderItemDto item = new OrderItemDto(
                 null,
@@ -121,15 +119,11 @@ class OrderIntegrationTest {
                 "Fresh fruits"
         );
 
-        InventoryDto inventory = new InventoryDto(
-                1L,
-                1L,
-                1,
-                0
-        );
+        when(productClient.getProductById(1L))
+                .thenReturn(product);
 
-        when(productClient.getProductById(1L)).thenReturn(product);
-        when(inventoryClient.getInventory(1L)).thenReturn(inventory);
+        when(inventoryClient.decreaseStock(1L, 2))
+                .thenThrow(new InsufficientStockException("Insufficient stock"));
 
         OrderItemDto item = new OrderItemDto(
                 null,

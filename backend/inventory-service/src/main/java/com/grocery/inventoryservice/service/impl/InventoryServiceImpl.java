@@ -1,6 +1,5 @@
 package com.grocery.inventoryservice.service.impl;
 
-import com.grocery.commonlibrary.exception.InsufficientReservedStockException;
 import com.grocery.commonlibrary.exception.InsufficientStockException;
 import com.grocery.commonlibrary.exception.InventoryAlreadyExistsException;
 import com.grocery.commonlibrary.exception.InventoryNotFoundException;
@@ -24,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
+
     private final InventoryRepo inventoryRepo;
     private final StockMovementRepo stockMovementRepo;
 
@@ -53,7 +53,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         Inventory inventory = inventoryRepo.findByProductId(productId)
                 .orElseThrow(() -> new InventoryNotFoundException(
-                                InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
+                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
 
         return InventoryMapper.toResponseDto(inventory);
     }
@@ -68,62 +68,53 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public InventoryResponseDto updateInventory(Long productId,
                                                 InventoryRequestDto request) {
 
         Inventory inventory = inventoryRepo.findByProductId(productId)
                 .orElseThrow(() -> new InventoryNotFoundException(
-                                InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
-
+                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
 
         inventory.setAvailableQuantity(request.availableQuantity());
-        inventory.setReservedQuantity(request.reservedQuantity());
 
         Inventory savedInventory = inventoryRepo.save(inventory);
 
         return InventoryMapper.toResponseDto(savedInventory);
     }
 
-
     @Override
-    @Transactional
-    public InventoryResponseDto releaseInventory(Long productId,
-                                                 Integer quantity) {
+    public void deleteInventory(Long productId) {
 
         Inventory inventory = inventoryRepo.findByProductId(productId)
                 .orElseThrow(() -> new InventoryNotFoundException(
-                                InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
+                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
 
-        if (inventory.getReservedQuantity() < quantity) {
-            throw new InsufficientReservedStockException(
-                    "Not enough reserved stock available for productId : " + productId);
-        }
+        inventoryRepo.delete(inventory);
+    }
 
-        inventory.setAvailableQuantity(
-                inventory.getAvailableQuantity() + quantity);
+    @Override
+    public boolean checkStock(Long productId, Integer quantity) {
 
-        inventory.setReservedQuantity(
-                inventory.getReservedQuantity() - quantity);
+        validateQuantity(quantity);
 
-        Inventory savedInventory = inventoryRepo.save(inventory);
+        Inventory inventory = inventoryRepo.findByProductId(productId)
+                .orElseThrow(() -> new InventoryNotFoundException(
+                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
 
-        saveStockMovement(
-                productId,
-                "RELEASE",
-                quantity,
-                "Reserved stock released");
-
-        return InventoryMapper.toResponseDto(savedInventory);
+        return inventory.getAvailableQuantity() >= quantity;
     }
 
     @Override
     @Transactional
-    public InventoryResponseDto reserveInventory(Long productId,
-                                                 Integer quantity) {
+    public InventoryResponseDto decreaseStock(Long productId,
+                                              Integer quantity) {
+
+        validateQuantity(quantity);
 
         Inventory inventory = inventoryRepo.findByProductId(productId)
                 .orElseThrow(() -> new InventoryNotFoundException(
-                                InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
+                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
 
         if (inventory.getAvailableQuantity() < quantity) {
             throw new InsufficientStockException(
@@ -133,69 +124,27 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.setAvailableQuantity(
                 inventory.getAvailableQuantity() - quantity);
 
-        inventory.setReservedQuantity(
-                inventory.getReservedQuantity() + quantity);
-
         Inventory savedInventory = inventoryRepo.save(inventory);
 
         saveStockMovement(
                 productId,
-                "RESERVE",
+                "STOCK_DECREASE",
                 quantity,
-                "Stock reserved");
+                "Stock decreased for order");
 
         return InventoryMapper.toResponseDto(savedInventory);
     }
 
-    @Override
-    @Transactional
-    public InventoryResponseDto confirmInventory(Long productId,
-                                                 Integer quantity) {
-
-        Inventory inventory = inventoryRepo.findByProductId(productId)
-                .orElseThrow(() -> new InventoryNotFoundException(
-                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
-
-        if (inventory.getReservedQuantity() < quantity) {
-            throw new InsufficientReservedStockException(
-                    "Not enough reserved stock available for productId : " + productId);
+    private void validateQuantity(Integer quantity){
+        if(quantity == null || quantity <= 0){
+            throw new IllegalArgumentException("Quantity must be greater than zero");
         }
-
-        inventory.setReservedQuantity(
-                inventory.getReservedQuantity() - quantity);
-
-        Inventory savedInventory = inventoryRepo.save(inventory);
-
-        saveStockMovement(
-                productId,
-                "CONFIRM",
-                quantity,
-                "Reserved stock confirmed");
-
-        return InventoryMapper.toResponseDto(savedInventory);
-    }
-
-    @Override
-    public void deleteInventory(Long productId) {
-        Inventory inventory = inventoryRepo.findByProductId(productId)
-                .orElseThrow(()-> new InventoryNotFoundException(
-                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
-        inventoryRepo.delete(inventory);
-    }
-
-    @Override
-    public boolean checkStock(Long productId, Integer quantity) {
-        Inventory inventory = inventoryRepo.findByProductId(productId)
-                .orElseThrow(()-> new InventoryNotFoundException(
-                        InventoryConstants.INVENTORY_NOT_FOUND_MESSAGE + productId));
-        return inventory.getAvailableQuantity() >= quantity;
-
     }
 
     private void saveStockMovement(Long productId,
-                              String movementType,
-                              Integer quantity,
-                              String remarks) {
+                                   String movementType,
+                                   Integer quantity,
+                                   String remarks) {
 
         StockMovement movement = StockMovement.builder()
                 .productId(productId)
@@ -207,5 +156,4 @@ public class InventoryServiceImpl implements InventoryService {
 
         stockMovementRepo.save(movement);
     }
-
 }

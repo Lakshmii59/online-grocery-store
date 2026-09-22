@@ -8,34 +8,33 @@ import {
 } from "../services/productService";
 import { getAllCategories } from "../services/categoryService";
 import "../scss/AdminProducts.scss";
-
+ 
 function AdminProducts() {
   const navigate = useNavigate();
-
+ 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
+ 
   const [showForm, setShowForm] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
-
+ 
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-
+ 
   const [formData, setFormData] = useState({
     productName: "",
     sku: "",
     price: "",
-    availableQuantity: "",
     imageUrl: "",
     active: true,
     categoryId: "",
   });
-
+ 
   useEffect(() => {
     loadProducts();
     loadCategories();
   }, []);
-
+ 
   const loadProducts = () => {
     getAllProducts()
       .then((response) => {
@@ -45,7 +44,7 @@ function AdminProducts() {
         console.error("Error fetching products", error);
       });
   };
-
+ 
   const loadCategories = () => {
     getAllCategories()
       .then((response) => {
@@ -55,68 +54,65 @@ function AdminProducts() {
         console.error("Error fetching categories", error);
       });
   };
-
+ 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
+ 
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-
+ 
   const handleAddProduct = () => {
     setEditProductId(null);
     setMessage("");
     setMessageType("");
-
+ 
     setFormData({
       productName: "",
       sku: "",
       price: "",
-      availableQuantity: "",
       imageUrl: "",
       active: true,
       categoryId: "",
     });
-
+ 
     setShowForm(true);
   };
-
+ 
   const handleEdit = (product) => {
     setEditProductId(product.productId);
     setMessage("");
     setMessageType("");
-
+ 
     setFormData({
       productName: product.productName,
       sku: product.sku,
       price: product.price,
-      availableQuantity: product.availableQuantity,
       imageUrl: product.imageUrl || "",
       active: product.active,
       categoryId: product.categoryId,
     });
-
+ 
     setShowForm(true);
   };
-
+ 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+ 
     setMessage("");
     setMessageType("");
-
+ 
     const product = {
       productName: formData.productName,
       sku: formData.sku,
       price: Number(formData.price),
-      availableQuantity: Number(formData.availableQuantity),
       active: formData.active === true || formData.active === "true",
       imageUrl: formData.imageUrl,
       categoryId: Number(formData.categoryId),
     };
-
+ 
     if (editProductId) {
       updateProduct(editProductId, product)
         .then(() => {
@@ -128,7 +124,7 @@ function AdminProducts() {
         .catch((error) => {
           const errorMessage =
             error.response?.data?.message || "Unable to update product";
-
+ 
           setMessage(errorMessage);
           setMessageType("error");
         });
@@ -143,22 +139,22 @@ function AdminProducts() {
         .catch((error) => {
           const errorMessage =
             error.response?.data?.message || "Unable to create product";
-
+ 
           setMessage(errorMessage);
           setMessageType("error");
         });
     }
   };
-
+ 
   const handleDelete = (productId) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this product?",
     );
-
+ 
     if (!confirmDelete) {
       return;
     }
-
+ 
     deleteProduct(productId)
       .then(() => {
         setMessage("Product deleted successfully");
@@ -168,29 +164,28 @@ function AdminProducts() {
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Unable to delete product";
-
+ 
         setMessage(errorMessage);
         setMessageType("error");
       });
   };
-
+ 
   const handleCancel = () => {
     setShowForm(false);
     setEditProductId(null);
     setMessage("");
     setMessageType("");
-
+ 
     setFormData({
       productName: "",
-      sku: "",
       price: "",
-      availableQuantity: "",
+      sku: "",
       imageUrl: "",
       active: true,
       categoryId: "",
     });
   };
-
+ 
   return (
     <div className="admin-products">
       <div className="admin-products-header">
@@ -198,7 +193,7 @@ function AdminProducts() {
           <h1>Product Management</h1>
           <p>Manage your FreshNest products</p>
         </div>
-
+ 
         <div className="header-actions">
           <button
             type="button"
@@ -207,7 +202,7 @@ function AdminProducts() {
           >
             Back to Dashboard
           </button>
-
+ 
           <button
             type="button"
             className="primary-button"
@@ -217,22 +212,22 @@ function AdminProducts() {
           </button>
         </div>
       </div>
-
+ 
       {message && (
         <div className={`form-message ${messageType}`}>{message}</div>
       )}
-
+ 
       {showForm && (
         <div className="product-form-card">
           <div className="form-header">
             <h2>{editProductId ? "Edit Product" : "Add Product"}</h2>
           </div>
-
+ 
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-group">
                 <label>Product Name</label>
-
+ 
                 <input
                   type="text"
                   name="productName"
@@ -244,7 +239,7 @@ function AdminProducts() {
 
               <div className="form-group">
                 <label>SKU</label>
-
+ 
                 <input
                   type="text"
                   name="sku"
@@ -253,23 +248,24 @@ function AdminProducts() {
                   required
                 />
               </div>
-
+ 
               <div className="form-group">
                 <label>Price</label>
-
+ 
                 <input
                   type="number"
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
                   min="0"
+                  step="0.01"
                   required
                 />
               </div>
-
+ 
               <div className="form-group">
                 <label>Category</label>
-
+ 
                 <select
                   name="categoryId"
                   value={formData.categoryId}
@@ -277,7 +273,7 @@ function AdminProducts() {
                   required
                 >
                   <option value="">Select Category</option>
-
+ 
                   {categories.map((category) => (
                     <option
                       key={category.categoryId}
@@ -288,23 +284,10 @@ function AdminProducts() {
                   ))}
                 </select>
               </div>
-
-              <div className="form-group">
-                <label>Available Quantity</label>
-
-                <input
-                  type="number"
-                  name="availableQuantity"
-                  value={formData.availableQuantity}
-                  onChange={handleChange}
-                  min="0"
-                  required
-                />
-              </div>
-
+ 
               <div className="form-group">
                 <label>Image URL</label>
-
+ 
                 <input
                   type="text"
                   name="imageUrl"
@@ -314,10 +297,10 @@ function AdminProducts() {
                   required
                 />
               </div>
-
+ 
               <div className="form-group">
                 <label>Active</label>
-
+ 
                 <select
                   name="active"
                   value={formData.active}
@@ -328,12 +311,12 @@ function AdminProducts() {
                 </select>
               </div>
             </div>
-
+ 
             <div className="form-actions">
               <button type="submit" className="primary-button">
                 {editProductId ? "Update Product" : "Save Product"}
               </button>
-
+ 
               <button
                 type="button"
                 className="cancel-button"
@@ -345,7 +328,7 @@ function AdminProducts() {
           </form>
         </div>
       )}
-
+ 
       <div className="product-table-card">
         <div className="table-header">
           <div>
@@ -353,7 +336,7 @@ function AdminProducts() {
             <span>{products.length} products</span>
           </div>
         </div>
-
+ 
         <div className="table-container">
           <table>
             <thead>
@@ -367,30 +350,36 @@ function AdminProducts() {
                 <th>Actions</th>
               </tr>
             </thead>
-
+ 
             <tbody>
               {products.map((product) => (
                 <tr key={product.productId}>
                   <td>{product.productId}</td>
+ 
+                  <td className="product-name">
+                    {product.productName}
+                  </td>
 
-                  <td className="product-name">{product.productName}</td>
-
-                  <td>{product.sku}</td>
-
-                  <td className="product-price">₹{product.price}</td>
-
-                  <td>{product.availableQuantity}</td>
-
+                  <td>
+                    {product.sku}
+                  </td>
+ 
+                  <td className="product-price">
+                    ₹{product.price}
+                  </td>
+ 
                   <td>
                     <span
                       className={
-                        product.active ? "status active" : "status inactive"
+                        product.active
+                          ? "status active"
+                          : "status inactive"
                       }
                     >
                       {product.active ? "Active" : "Inactive"}
                     </span>
                   </td>
-
+ 
                   <td>
                     <div className="action-buttons">
                       <button
@@ -400,11 +389,13 @@ function AdminProducts() {
                       >
                         Edit
                       </button>
-
+ 
                       <button
                         type="button"
                         className="delete-button"
-                        onClick={() => handleDelete(product.productId)}
+                        onClick={() =>
+                          handleDelete(product.productId)
+                        }
                       >
                         Delete
                       </button>
@@ -419,5 +410,5 @@ function AdminProducts() {
     </div>
   );
 }
-
+ 
 export default AdminProducts;

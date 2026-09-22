@@ -11,10 +11,6 @@ public record InventoryResponseDto(
         Long productId,
 
         @Schema(description = "Available Quantity", example = "100")
-        Integer availableQuantity,
-
-        @Schema(description = "Reserved Quantity", example = "10")
-        Integer reservedQuantity
-
+        Integer availableQuantity
 ) {
 }

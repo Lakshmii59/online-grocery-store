@@ -140,41 +140,6 @@ public class InventoryController {
     }
 
     @Operation(
-            summary = "Confirm Inventory",
-            description = "Deducts reserved inventory after an order is confirmed."
-    )
-    @ApiResponses(value ={
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Inventory confirmed successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Inventory not found",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid request",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    })
-    @PutMapping("/{productId}/confirm")
-    public ResponseEntity<InventoryResponseDto> confirmInventory(
-
-            @Parameter(description = "Product ID", example = "1")
-            @PathVariable("productId") Long productId,
-
-            @Parameter(description = "Quantity to confirm", example = "5")
-            @RequestParam("quantity") Integer quantity) {
-        return ResponseEntity.ok(inventoryService.confirmInventory(productId, quantity));
-    }
-
-    @Operation(
             summary = "Delete Product Inventory",
             description = "Deletes inventory for a given product."
     )
@@ -195,82 +160,6 @@ public class InventoryController {
         inventoryService.deleteInventory(productId);
 
         return ResponseEntity.noContent().build();
-    }
-
-
-    @Operation(
-            summary = "Reserve Product Inventory",
-            description = """
-                    Reserves inventory during order creation.
- 
-                    Business Rules:
-                    • Inventory must exist.
-                    • Available quantity should be sufficient.
-                    • Available quantity decreases.
-                    • Reserved quantity increases.
-                    """
-    )
-    @ApiResponses(value ={
-            @ApiResponse(responseCode = "200", description = "Inventory reserved successfully"),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Insufficient stock",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Inventory not found",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
-            )
-    })
-    @PutMapping("/{productId}/reserve")
-    public ResponseEntity<InventoryResponseDto> reserveInventory(
-
-            @Parameter(description = "Product Identifier", example = "101")
-            @PathVariable("productId") Long productId,
-
-            @Parameter(description = "Quantity to reserve", example = "5")
-            @RequestParam("quantity") Integer quantity) {
-
-        return ResponseEntity.ok(
-                inventoryService.reserveInventory(productId, quantity));
-    }
-
-    @Operation(
-            summary = "Release Reserved Inventory",
-            description = """
-                    Releases reserved inventory when an order
-                    is cancelled or fails.
- 
-                    Business Rules:
-                    • Reserved quantity decreases.
-                    • Available quantity increases.
-                    """
-    )
-    @ApiResponses(value ={
-            @ApiResponse(responseCode = "200", description = "Inventory released successfully"),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid release quantity",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Inventory not found",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
-            )
-    })
-    @PutMapping("{productId}/release")
-    public ResponseEntity<InventoryResponseDto> releaseInventory(
-
-            @Parameter(description = "Product Identifier", example = "101")
-            @PathVariable("productId") Long productId,
-
-            @Parameter(description = "Quantity to release", example = "5")
-            @RequestParam("quantity") Integer quantity) {
-
-        return ResponseEntity.ok(
-                inventoryService.releaseInventory(productId, quantity));
     }
 
     @Operation(
@@ -296,5 +185,42 @@ public class InventoryController {
 
         return ResponseEntity.ok(
                 inventoryService.checkStock(productId, quantity));
+    }
+
+    @Operation(
+            summary = "Decrease Product Stock",
+            description = "Decreases available stock after an order is placed."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stock decreased successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Insufficient stock",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Inventory not found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    })
+    @PutMapping("/{productId}/decrease")
+    public ResponseEntity<InventoryResponseDto> decreaseStock(
+
+            @Parameter(description = "Product Identifier", example = "101")
+            @PathVariable("productId") Long productId,
+
+            @Parameter(description = "Quantity to decrease", example = "5")
+            @RequestParam("quantity") Integer quantity) {
+
+        return ResponseEntity.ok(
+                inventoryService.decreaseStock(productId, quantity));
     }
 }

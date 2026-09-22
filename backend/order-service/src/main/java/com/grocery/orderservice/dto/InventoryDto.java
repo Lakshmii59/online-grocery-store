@@ -5,7 +5,5 @@ public record InventoryDto (
 
      Long productId,
 
-     Integer availableQuantity,
-
-     Integer reservedQuantity
+     Integer availableQuantity
 ){}

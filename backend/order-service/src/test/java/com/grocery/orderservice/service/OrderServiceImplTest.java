@@ -155,7 +155,7 @@ class OrderServiceImplTest {
                 .thenReturn(order);
 
         OrderResponseDto dto =
-                orderService.updateOrderStatus(1L, "CONFIRMED");
+                orderService.updateOrderStatus(1L, "DELIVERED");
 
         assertNotNull(dto);
 
@@ -231,11 +231,11 @@ class OrderServiceImplTest {
 
         orderService.cancelOrder(1L);
 
-        verify(inventoryClient)
-                .releaseInventory(100L,2);
+        assertEquals("CANCELLED", order.getOrderStatus());
 
-        verify(groceryOrderRepo)
-                .save(order);
+        verify(groceryOrderRepo).save(order);
+
+        verifyNoInteractions(inventoryClient);
     }
 
 

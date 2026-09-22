@@ -18,9 +18,6 @@ public record ProductResponseDto(
         @Schema(description = "Price", example = "120.50")
         BigDecimal price,
 
-        @Schema(description = "Available Quantity", example = "100")
-        Integer availableQuantity,
-
         @Schema(description = "Product Status", example = "true")
         Boolean active,
 

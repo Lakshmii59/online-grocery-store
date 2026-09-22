@@ -26,9 +26,6 @@ public class  Product {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private Integer availableQuantity;
-
-    @Column(nullable = false)
     private Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)

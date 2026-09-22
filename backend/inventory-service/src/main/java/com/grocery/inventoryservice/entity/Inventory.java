@@ -22,7 +22,4 @@ public class Inventory {
 
     @Column(nullable = false)
     private Integer availableQuantity;
-
-    @Column(nullable = false)
-    private Integer reservedQuantity;
 }

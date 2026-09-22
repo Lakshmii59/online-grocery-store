@@ -13,6 +13,4 @@ public interface OrderService {
     OrderResponseDto updateOrderStatus(Long orderId,String status);
     void deleteOrder(Long orderId);
     void cancelOrder(Long orderId);
-
-    OrderResponseDto confirmOrder(Long orderId);
 }
